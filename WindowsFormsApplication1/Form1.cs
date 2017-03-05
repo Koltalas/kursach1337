@@ -18,17 +18,21 @@ namespace WindowsFormsApplication1
         public string file;
         public string filename;
 
+
+        List<themes> Themes;
+        List<ListViewGroup> themesList;
         Writer writer;
         public Form1()
         {
             InitializeComponent();
             CurrentUser.TeacherDiscipline = 1;
+
             try
             {
                 db = new Model1();
                 writer = new Writer(db);
-                List<ListViewGroup> themesList = new List<ListViewGroup>();
-                List<themes> Themes = db.themes.ToList();
+                themesList = new List<ListViewGroup>();
+                Themes = db.themes.ToList();
                 List<books> Books = db.books.ToList();
 
                 for (int i = 0; i < db.themes.Count(); i++)
@@ -43,7 +47,7 @@ namespace WindowsFormsApplication1
 
                 for (int i = 0; i < db.books.Count(); i++)
                 {
-                    listView1.Items.Add(new ListViewItem(Books[i].bname, idFind(themesList, Books[i].themes.tname)));
+                    listView1.Items.Add(new ListViewItem(Books[i].bname, 0, themeExist(Themes)));
                 }
 
                 for (int i = 0; i < themesList.Count(); i++)
@@ -68,18 +72,21 @@ namespace WindowsFormsApplication1
             { }
         }
 
-        ListViewGroup idFind(List<ListViewGroup> themesList, string str)
+        ListViewGroup themeExist(List<themes> Themes)
         {
-            for (int i = 0; i < themesList.Count(); i++)
-            {
-                if(themesList[i].Name == str);
+           
+                for (int i = 0; i < listView1.Groups.Count; i++)
                 {
-                    return themesList[i];
+                    for (int j = 0; j < db.themes.Count(); j++)
+                    {
+                        if (listView1.Groups[i].Name == Themes[j].tname)
+                            return listView1.Groups[i];
+                    }
                 }
-            }
-
-            return themesList[1];
-        }
+           
+                return null;
+            
+        }        
 
         private void button1_Click(object sender, EventArgs e)
         {
