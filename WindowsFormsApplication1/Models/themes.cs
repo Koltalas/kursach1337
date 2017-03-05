@@ -18,6 +18,8 @@ namespace WindowsFormsApplication1
         [Key]
         public int tid { get; set; }
 
+        public int did { get; set; }
+
         [Required]
         [StringLength(255)]
         public string tname { get; set; }
