@@ -9,11 +9,20 @@ namespace WindowsFormsApplication1
     [Table("ejournal.themes")]
     public partial class themes
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public themes()
+        {
+            books = new HashSet<books>();
+        }
+
         [Key]
         public int tid { get; set; }
 
         [Required]
         [StringLength(255)]
         public string tname { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<books> books { get; set; }
     }
 }

@@ -26,6 +26,11 @@ namespace WindowsFormsApplication1
                 .Property(e => e.tname)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<themes>()
+                .HasMany(e => e.books)
+                .WithRequired(e => e.themes)
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<users>()
                 .Property(e => e.ulogin)
                 .IsUnicode(false);

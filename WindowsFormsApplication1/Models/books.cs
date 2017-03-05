@@ -20,5 +20,7 @@ namespace WindowsFormsApplication1
 
         [Column(TypeName = "blob")]
         public byte[] document { get; set; }
+
+        public virtual themes themes { get; set; }
     }
 }

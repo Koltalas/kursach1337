@@ -17,11 +17,12 @@ namespace WindowsFormsApplication1
         public string file;
         public string filename;
 
+        Writer writer;
         public Form1()
         {
             InitializeComponent();
             db = new Model1();
-
+            writer = new Writer(db);
             List<ListViewGroup> themesList = new List<ListViewGroup>();
             List<themes> Themes = db.themes.ToList();
             List<books> Books = db.books.ToList();
@@ -38,9 +39,14 @@ namespace WindowsFormsApplication1
 
             for (int i = 0; i < db.books.Count(); i++)
             {
-                listView1.Items.Add(new ListViewItem(Books[i].bname, themesList[Books[i].tid]));
+                listView1.Items.Add(new ListViewItem(Books[i].bname, idFind(themesList, Books[i].themes.tname)));
             }
 
+            for (int i = 0; i < themesList.Count(); i++)
+            {
+                comboBox1.Items.Add(Themes[i].tname);
+            }
+            
 
             /*   List<themes> theme = db.themes.ToList();
 
@@ -56,27 +62,17 @@ namespace WindowsFormsApplication1
             
         }
 
-        public void upload()
+        ListViewGroup idFind(List<ListViewGroup> themesList, string str)
         {
-            string filePath = file;
-            string filename = Path.GetFileName(filePath);
+            for (int i = 0; i < themesList.Count(); i++)
+            {
+                if(themesList[i].Name == str);
+                {
+                    return themesList[i];
+                }
+            }
 
-            FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            BinaryReader br = new BinaryReader(fs);
-            Byte[] bytes = br.ReadBytes((Int32)fs.Length);
-            br.Close();
-            fs.Close();
-
-            themes th = new themes();
-            th.tname = textBox1.Text;
-            books bk = new books();
-            bk.bname = Path.GetFileName(filePath);
-           // bk.tid = th.tid;
-            bk.document = bytes;
-
-            db.themes.Add(th);
-            db.books.Add(bk);
-            db.SaveChanges();
+            return themesList[1];
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -84,13 +80,15 @@ namespace WindowsFormsApplication1
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 file = openFileDialog1.FileName;
+                textBox1.Text = file;
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            upload();
+            writer.AddEntry(comboBox1.Text, file);
         }
+        
     }
 }
 
